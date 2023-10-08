@@ -32,7 +32,18 @@
                                 <div class="panel-body">
 
                                     <!-- ------------------------FORM START----------------------------- -->
-                                    <form action="#" th:object="${newUser}">
+                                    <form th:action="@{/user/create}" method="post" th:object="${newUser}">
+<!-- .html deki bir form tag i icine th:object yaziyoruz. Bunun icine
+controller dan bos bir obje (th:object="${newUser}") gönderiyoruz (@NoArgsConstructor aslinda
+bir nevi bunun icin, ayrica bu empty POJO fill edildikten sonra bunu
+@ModelAttribute ile diger controller methodundan catch edip POST
+protokol ile Repository e save ediyoruz).
+Ayrica th:action ile form tag deki bilgiler submit button a baska ya da ayni
+endpoint atiyoruz (th:action="@{/user/create}" => ayni end point e
+directing olunca genelde 2nd method POST, ilki GET oluyor).
+Neden method="post" u kullaniyorum? => Cünkü doldurulan form daki data lari
+save edecegim. Bunun icin controller a gidip @PostMapping ile yeni bir method
+create ediyorum-->
                                         <div class="row">
                                             <div class="col-sm-6 col-md-6">
                                                 <div class="form-group">
@@ -93,12 +104,15 @@
                                                 <div class="form-group">
                                                     <label>Gender</label><br>
                                                     <label class="custom-control custom-radio custom-control-inline">
-                                                        <input type="radio" name="radio-inline" class="custom-control-input"><span class="custom-control-label"
-                                                    th:field="*{gender}" th:value="${newUser.gender.MALE}">Male</span>
+                                                        <input type="radio" name="radio-inline" class="custom-control-input"
+                                                               th:field="*{gender}" th:value="MALE">
+                                                        <span class="custom-control-label">Male</span>
                                                     </label>
                                                     <label class="custom-control custom-radio custom-control-inline">
-                                                        <input type="radio" name="radio-inline" class="custom-control-input"><span class="custom-control-label"
-                                                    th:value="${newUser.gender.FEMALE}">Female</span>
+                                                        <input type="radio" name="radio-inline" class="custom-control-input"
+                                                               th:field="*{gender}" th:value="FEMALE">
+                                                        <span class="custom-control-label">Female</span>
+<!-- gender icin input tag i icindeki value ye Male ya da Female yazinca run time error veriyor-->
                                                     </label>
 
                                                 </div>
@@ -108,8 +122,15 @@
                                                 <div class="form-group">
                                                     <label>Choose a Role</label>
                                                     <select name="role" class="custom-select" th:field="*{roleDTO}">
+<!-- Eger biz tag icinde name ve id degerleri atamazsak thymeleaf or html kendisi
+otomatik olarak bunlari define ediyor. Ör UI dan bir part =>
+<select name="roleDTO" class="custom-select" id="roleDTO"> ... </select>>
+bunun gibi-->
                                                         <option th:value="''" th:text="Select"></option>
-                                                        <option th:each="eachRole : ${}" th:value="${eachRole}" th:text="${eachRole}"></option>
+                                                        <option th:each="eachRole : ${listOfRoles}" th:value="${eachRole.id}"
+                                                                th:text="${eachRole.description}"></option>
+<!-- Eger eachRole.id veya eachRole.description böyle belirtmezsek Role obje olarak
+getirilir => like => id=1; description=Admin ...-->
                                                     </select>
                                                 </div>
                                             </div>
@@ -163,12 +184,16 @@
 
                                             <tbody>
 
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                            <tr th:each="eachUser : ${allUser}">
+                                                <td th:text="${eachUser.firstName + ' ' + eachUser.lastName}"></td>
+                                                <td th:text="${eachUser.userName}"></td>
+                                                <td th:text="${eachUser.gender.value}"></td>
+<!-- Neden eachUser.gender.value dedik? => Cünkü enum kücük harf ve bosluklara
+izin vermedigi icin bunu parametreli, constructor li ve getValue() methodlu yaptik.
+Böylece istedgimiz sekilde degerleri parametre olarak yazip onlari ilgili
+field name (burada value) ile call edebiliyoruz.-->
+                                                <td th:text="${eachUser.phone}"></td>
+                                                <td th:text="${eachUser.roleDTO.description}"></td>
                                                 <td class="actions">
                                                     <a href="#"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
                                                     <a href="#" class="delete-row"><button type="button" class="btn btn-secondary btn-sm">Delete</button></a>
