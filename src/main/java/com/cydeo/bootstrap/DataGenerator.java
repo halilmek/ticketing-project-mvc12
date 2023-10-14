@@ -1,15 +1,19 @@
 package com.cydeo.bootstrap;
 
+import com.cydeo.dto.ProjectDTO;
 import com.cydeo.dto.RoleDTO;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.Role;
 import com.cydeo.enums.Gender;
+import com.cydeo.enums.Status;
+import com.cydeo.service.ProjectService;
 import com.cydeo.service.RoleService;
 import com.cydeo.service.UserService;
 import com.cydeo.service.impl.RoleDTOServiceImpl;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
 @Component
@@ -21,12 +25,13 @@ public class DataGenerator implements CommandLineRunner {
 //wiring icin implementation lara ve inject edilen yerlere @Component koymak gerekiyor.
     RoleService roleDTOService;
     UserService userDTOService;
+    private final ProjectService projectService;
 
-    public DataGenerator(RoleService roleDTOService, UserService userDTOService) {
+    public DataGenerator(RoleService roleDTOService, UserService userDTOService, ProjectService projectService) {
         this.roleDTOService = roleDTOService;
         this.userDTOService = userDTOService;
+        this.projectService = projectService;
     }
-
 
     @Override
     public void run(String... args) throws Exception {
@@ -66,5 +71,21 @@ public class DataGenerator implements CommandLineRunner {
         userDTOService.save(user4);
         userDTOService.save(user5);
         userDTOService.save(user6);
+
+
+        ProjectDTO project1 = new ProjectDTO("Halil's Spring Boot MVC", "PR001", user1, LocalDate.now(), LocalDate.now(), "Halil Baba kafasina göre takiliyor!", Status.OPEN);
+        ProjectDTO project2 = new ProjectDTO("Halil's Spring Boot ORM", "PR002", user2, LocalDate.now(), LocalDate.now(), "ORRRRRR ARE M", Status.IN_PROGRESS);
+        ProjectDTO project3 = new ProjectDTO("Halil's Spring Boot Container", "PR003", user4, LocalDate.now(), LocalDate.now(), "CONTAINER!", Status.OPEN);
+        ProjectDTO project4 = new ProjectDTO("Halil's Spring Boot Core - DI", "PR004", user1, LocalDate.now(), LocalDate.now(), "Dependency Injection", Status.OPEN);
+        ProjectDTO project5 = new ProjectDTO("Halil's Spring Boot Inversion of Control - IoC", "PR005", user6, LocalDate.now(), LocalDate.now(), "Inversion of Control!", Status.OPEN);
+        ProjectDTO project6 = new ProjectDTO("Halil's Spring Boot, Bugün cmts ama ben ders calisiyorum.", "PR006", user2, LocalDate.now(), LocalDate.now(), "Wiring - Passing the data to view!!!", Status.OPEN);
+
+        projectService.save(project1);
+        projectService.save(project2);
+        projectService.save(project3);
+        projectService.save(project4);
+        projectService.save(project5);
+        projectService.save(project6);
+
     }
 }

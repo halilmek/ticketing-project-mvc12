@@ -13,22 +13,33 @@ public class UserDTOServiceImpl extends AbstractMapService <UserDTO, String>
 
     @Override
     public UserDTO save(UserDTO obj) {
+
         return super.save(obj.getUserName(), obj);
     }
 
     @Override
     public List<UserDTO> findAll() {
+
         return super.findAll();
     }
 
     @Override
     public UserDTO findById(String id) {
+
         return super.findById(id);
     }
 
     @Override
     public void deleteById(String id) {
 
-        mapOfUser.remove(id);
+        super.deleteById(id);
     }
+
+    @Override
+    public void update(UserDTO obj) {
+
+        super.update(obj.getUserName(), obj);
+    }
+
+
 }

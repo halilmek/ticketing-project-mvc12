@@ -26,25 +26,39 @@
 
                             <section class="panel panel-transparent">
                                 <header class="panel-heading">
-                                    <h2 class="panel-title">User Update</h2>
+                                    <h2 class="panel-title">User Create</h2>
                                 </header>
 
                                 <div class="panel-body">
 
                                     <!-- ------------------------FORM START----------------------------- -->
-                                    <form class="needs-validation" action="#">
+                                    <form th:action="@{/user/update/{id}(id=${user.userName})}" method="post" th:object="${user}">
+<!-- .html deki bir form tag i icine th:object yaziyoruz. Bunun icine
+controller dan bos bir obje (th:object="${newUser}") gönderiyoruz (@NoArgsConstructor aslinda
+bir nevi bunun icin, ayrica bu empty POJO fill edildikten sonra bunu
+@ModelAttribute ile diger controller methodundan catch edip POST
+protokol ile Repository e save ediyoruz).
+Ayrica th:action ile form tag deki bilgiler submit button a baska ya da ayni
+endpoint atiyoruz (th:action="@{/user/create}" => ayni end point e
+directing olunca genelde 2nd method POST, ilki GET oluyor).
+Neden method="post" u kullaniyorum? => Cünkü doldurulan form daki data lari
+save edecegim. Bunun icin controller a gidip @PostMapping ile yeni bir method
+create ediyorum-->
                                         <div class="row">
                                             <div class="col-sm-6 col-md-6">
                                                 <div class="form-group">
                                                     <label for="firstname" class="col-form-label">First Name</label>
-                                                    <input id="firstname" type="text" placeholder="first name" class="form-control">
+                                                    <input id="firstname" type="text" placeholder="first name" class="form-control"
+                                                           th:field="*{firstName}"><!-- Neden getFirstName() yapmiyorum? yani getter
+                                                    kullanmiyorum? Cünkü bunu o zaman POST protokolü ile kullanamazdim!-->
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-6 col-md-6">
                                                 <div class="form-group">
                                                     <label for="lastname" class="col-form-label">Last Name</label>
-                                                    <input id="lastname" type="text" placeholder="last name" class="form-control">
+                                                    <input id="lastname" type="text" placeholder="last name" class="form-control"
+                                                           th:field="*{lastName}">
                                                 </div>
                                             </div>
                                         </div>
@@ -53,14 +67,16 @@
                                             <div class="col-sm-6 col-md-6">
                                                 <div class="form-group">
                                                     <label for="emailaddress" class="col-form-label">Email Address</label>
-                                                    <input id="emailaddress" type="text" placeholder="email address" class="form-control">>
+                                                    <input id="emailaddress" type="text" placeholder="email address" class="form-control"
+                                                           th:field="*{userName}">
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-6 col-md-6">
                                                 <div class="form-group">
                                                     <label for="phonenumber" class="col-form-label">Phone Number</label>
-                                                    <input id="phonenumber" type="tel" placeholder="phone number" class="form-control">
+                                                    <input id="phonenumber" type="tel" placeholder="phone number" class="form-control"
+                                                           th:field="*{phone}">
                                                 </div>
                                             </div>
                                         </div>
@@ -69,14 +85,16 @@
                                             <div class="col-sm-6 col-md-6">
                                                 <div class="form-group">
                                                     <label for="password" class="col-form-label">Password</label>
-                                                    <input id="password" type="password" placeholder="password" class="form-control">
+                                                    <input id="password" type="password" placeholder="password" class="form-control"
+                                                           th:field="*{password}">
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-6 col-md-6">
                                                 <div class="form-group">
                                                     <label for="repassword" class="col-form-label">Confirm Password</label>
-                                                    <input id="repassword" type="password" placeholder="confirm your password" class="form-control">
+                                                    <input id="repassword" type="password" placeholder="confirm your password" class="form-control"
+                                                           th:field="*{password}">
                                                 </div>
                                             </div>
                                         </div>
@@ -86,10 +104,15 @@
                                                 <div class="form-group">
                                                     <label>Gender</label><br>
                                                     <label class="custom-control custom-radio custom-control-inline">
-                                                        <input type="radio" name="radio-inline" class="custom-control-input"><span class="custom-control-label">Male</span>
+                                                        <input type="radio" name="radio-inline" class="custom-control-input"
+                                                               th:field="*{gender}" th:value="MALE">
+                                                        <span class="custom-control-label">Male</span>
                                                     </label>
                                                     <label class="custom-control custom-radio custom-control-inline">
-                                                        <input type="radio" name="radio-inline" class="custom-control-input"><span class="custom-control-label">Female</span>
+                                                        <input type="radio" name="radio-inline" class="custom-control-input"
+                                                               th:field="*{gender}" th:value="FEMALE">
+                                                        <span class="custom-control-label">Female</span>
+                                                        <!-- gender icin input tag i icindeki value ye Male ya da Female yazinca run time error veriyor-->
                                                     </label>
 
                                                 </div>
@@ -98,8 +121,21 @@
                                             <div class="col-sm-6 col-md-6">
                                                 <div class="form-group">
                                                     <label>Choose a Role</label>
-                                                    <select name="role" class="custom-select">
-                                                        <option></option>
+                                                    <select name="role" class="custom-select" th:field="*{roleDTO}">
+                                                        <!-- Eger biz tag icinde name ve id degerleri atamazsak thymeleaf or html kendisi
+                                                        otomatik olarak bunlari define ediyor. Ör UI dan bir part =>
+                                                        <select name="roleDTO" class="custom-select" id="roleDTO"> ... </select>>
+                                                        bunun gibi-->
+
+<!--Burasi update page oldugu icin <option th:value="''" th:text="Select"></option>
+ kismina ihtiyacimiz yok. Cünkü direk user in role u gelecek. Yani 0 dan user create
+ etmiyoruz.-->
+
+                                                        <option th:each="eachRole : ${listOfRoles}" th:value="${eachRole.id}"
+                                                                th:text="${eachRole.description}"></option>
+                                                        <!-- Eger eachRole.id veya eachRole.description böyle belirtmezsek Role obje olarak
+                                                        getirilir => like => id=1; description=Admin ...-->
+
                                                     </select>
                                                 </div>
                                             </div>
@@ -153,15 +189,32 @@
 
                                             <tbody>
 
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                            <tr th:each="eachUser : ${allUser}">
+                                                <td th:text="${eachUser.firstName + ' ' + eachUser.lastName}"></td>
+                                                <td th:text="${eachUser.userName}"></td>
+                                                <td th:text="${eachUser.gender.value}"></td>
+                                                <!-- Neden eachUser.gender.value dedik? => Cünkü enum kücük harf ve bosluklara
+                                                izin vermedigi icin bunu parametreli, constructor li ve getValue() methodlu yaptik.
+                                                Böylece istedgimiz sekilde degerleri parametre olarak yazip onlari ilgili
+                                                field name (burada value) ile call edebiliyoruz.-->
+                                                <td th:text="${eachUser.phone}"></td>
+                                                <td th:text="${eachUser.roleDTO.description}"></td>
                                                 <td class="actions">
-                                                    <a href="#"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-                                                    <a href="#" class="delete-row"><button type="button" class="btn btn-secondary btn-sm">Delete</button></a>
+                                                    <a th:href="@{/user/update/{id}(id=${eachUser.userName})}">
+                                                        <!-- Böylece view den Java ya veri gönderiyorum. Ayrica bu th:href
+                                                        bizi baska bir view e götürecek. Cünkü bu view de form her seferinde empty
+                                                        gelmelidir. Ancak o zaman yeni user create edebilir ve listeme ekleyebilirim.
+                                                        Ama update button a basinca secilen user in bilgileri forma gelmeli ki istedigim
+                                                        field leri change edebileyim, ama nasil? create.hmtl ile hemen hemen ayni olan
+                                                        update.html i create ediyorum ve end point olarak onu veriyorum. Böylece update
+                                                        button i click edilen user in bilgilerini bu yeni end point form a pass
+                                                        edebilirim-->
+                                                        <button type="button" class="btn btn-warning btn-sm">Update</button>
+                                                    </a>
+
+                                                    <a th:href="@{/user/delete/{id}(id=${user.userName})}" class="delete-row">
+                                                        <button type="button" class="btn btn-secondary btn-sm">Delete</button>
+                                                    </a>
                                                 </td>
                                             </tr>
 

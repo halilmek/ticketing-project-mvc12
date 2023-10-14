@@ -195,8 +195,21 @@ field name (burada value) ile call edebiliyoruz.-->
                                                 <td th:text="${eachUser.phone}"></td>
                                                 <td th:text="${eachUser.roleDTO.description}"></td>
                                                 <td class="actions">
-                                                    <a href="#"><button type="button" class="btn btn-warning btn-sm">Update</button></a>
-                                                    <a href="#" class="delete-row"><button type="button" class="btn btn-secondary btn-sm">Delete</button></a>
+                                                    <a th:href="@{/user/update/{id}(id=${eachUser.userName})}">
+<!-- Böylece view den Java ya veri gönderiyorum. Ayrica bu th:href
+bizi baska bir view e götürecek. Cünkü bu view de form her seferinde empty
+gelmelidir. Ancak o zaman yeni user create edebilir ve listeme ekleyebilirim.
+Ama update button a basinca secilen user in bilgileri forma gelmeli ki istedigim
+field leri change edebileyim, ama nasil? create.hmtl ile hemen hemen ayni olan
+update.html i create ediyorum ve end point olarak onu veriyorum. Böylece update
+button i click edilen user in bilgilerini bu yeni end point form a pass
+edebilirim-->
+                                                        <button type="button" class="btn btn-warning btn-sm">Update</button>
+                                                    </a>
+
+                                                    <a th:href="@{/user/delete/{id}(id=${eachUser.userName})}" class="delete-row">
+                                                        <button type="button" class="btn btn-secondary btn-sm">Delete</button>
+                                                    </a>
                                                 </td>
                                             </tr>
 

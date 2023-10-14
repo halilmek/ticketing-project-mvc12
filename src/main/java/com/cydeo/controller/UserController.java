@@ -6,10 +6,7 @@ import com.cydeo.service.RoleService;
 import com.cydeo.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -71,10 +68,56 @@ save islemlerini yapiyor.
     }
 
 
+    @GetMapping("/update/{username}")
+    public String editUser (@PathVariable ("username") String username, Model model) {
+//@PathVariable ile view den endpoint e eklenen parameter i get edebiliyorum.
+//Bunun ile update edilecek user a Java icinde ulasiyorum. Ve belirtilen user daki
+//istenilen degisiklikleri form ile alip Java da realize ediyorum.
+
+        //i need username, define the attributes => ${} => users, roles, user
+        model.addAttribute("user", userDTOService.findById(username));//user
+//Eger burada empty user object call etsek o zaman update edilecek user bilgileri
+//update end point te form a gelmeyecekti.
+
+        //model.addAttribute("newUser", new UserDTO());
+
+        model.addAttribute("listOfRoles", roleDTOService.findAll());
+//Attribute name, attribute value => which is like list this time.
+        model.addAttribute("allUser", userDTOService.findAll());
+
+
+        return "/user/update";
+    }
+
+    @PostMapping("/update/{username}")
+    public String updateUser (@PathVariable ("username") String username, //Buna burada gerek yok
+                              @ModelAttribute ("user") UserDTO userDTO) {
+
+        //model.addAttribute("newUser", new UserDTO());
+
+        //model.addAttribute("listOfRoles", roleDTOService.findAll());
+        //model.addAttribute("allUser", userDTOService.findAll());
+//redirect ile tekrar attribute  leri model ile pass etmeme gerek yok.
+
+//Ancak update edilen user buraya getirip map ime save etmem lazim, ama nasil?
+//@ModelAttribute ile !!!
+        userDTOService.update(userDTO);
+        userDTOService.findAll().stream().filter(each -> each.getUserName().equals(username)).forEach(System.out::println);
+
+        return "redirect:/user/create";
+    }
+
+    @GetMapping("/delete/{username}")
+    public String deleteUser (@PathVariable("username") String username) {
+
+        userDTOService.deleteById(username);
+
+        System.out.println("Bu kisim delete eksin dan geliyor.");
+        userDTOService.findAll().stream().forEach(System.out::println);
+        return "redirect:/user/create";
+    }
+
     /*
-
-
-
 
     @PostMapping("/create")
     public String insertUser (@ModelAttribute("newUser") UserDTO userDTO, Model model) {

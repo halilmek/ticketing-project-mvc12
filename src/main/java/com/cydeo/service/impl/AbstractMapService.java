@@ -33,4 +33,9 @@ public abstract class AbstractMapService <T, ID> { // Neden abstract? Cünkü ob
 
         mapOfUser.remove(id);
     }
+
+    void update (ID id, T obj) {
+
+        mapOfUser.put(id, obj);
+    }
 }

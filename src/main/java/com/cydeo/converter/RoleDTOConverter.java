@@ -7,7 +7,9 @@ import org.springframework.core.convert.converter.Converter;//Bu converter
 import org.springframework.stereotype.Component;
 
 @Component //Buranin da Bean icin create edildigini belirtiyoruz.
-@ConfigurationPropertiesBinding
+@ConfigurationPropertiesBinding //Burada Spring ten yardim istiyoruz, ve diyoruz ki
+//when app is initiated, bu converter i da o zaman calistir. Cünkü ben aksi halde
+//hata ile karsilasacagim bunu convert etmezsem.
 public class RoleDTOConverter implements Converter<String, RoleDTO> {
 
     RoleService roleDTOService;//Interface üzerinden wiring / injection
