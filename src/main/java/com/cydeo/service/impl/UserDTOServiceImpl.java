@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDTOServiceImpl extends AbstractMapService <UserDTO, String>
@@ -42,4 +43,18 @@ public class UserDTOServiceImpl extends AbstractMapService <UserDTO, String>
     }
 
 
+    @Override
+    public List<UserDTO> allManagers() {
+
+//Neden stream ögrenmeliyiz?
+        return super.findAll().stream()
+                .filter(each -> each.getRoleDTO().getId() == 2)
+                .collect(Collectors.toList());
+
+        /*return super.findAll().stream()
+                .filter(each -> each.getRoleDTO().getDescription().equals("Manager"))
+                .collect(Collectors.toList());
+
+         */
+    }
 }

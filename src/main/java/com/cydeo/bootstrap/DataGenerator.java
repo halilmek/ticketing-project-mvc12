@@ -58,7 +58,7 @@ public class DataGenerator implements CommandLineRunner {
 // genel bir java class (String) ve methodu gibi (length() veya subString() gibi).-
 
 
-        UserDTO user1 = new UserDTO("Halil", "Baba", "ztrkhll@gmail.com", "oppo", true, "123456", managerRole, Gender.MALE);
+        UserDTO user1 = new UserDTO("Halil", "Baba", "ztrkhll@gmail.com", "oppo", true, "123456", employeeRole, Gender.MALE);
         UserDTO user2 = new UserDTO("Hasan", "Kardes", "abc@gmail.com", "oppo", false, "123456", managerRole, Gender.FEMALE);
         UserDTO user3 = new UserDTO("Elif", "Ünsal", "123@gmail.com", "oppo", true, "123456", adminRole, Gender.MALE);
         UserDTO user4 = new UserDTO("Padisah", "Sultan", "üpoiu@gmail.com", "oppo", true, "123456", managerRole, Gender.FEMALE);
@@ -73,12 +73,12 @@ public class DataGenerator implements CommandLineRunner {
         userDTOService.save(user6);
 
 
-        ProjectDTO project1 = new ProjectDTO("Halil's Spring Boot MVC", "PR001", user1, LocalDate.now(), LocalDate.now(), "Halil Baba kafasina göre takiliyor!", Status.OPEN);
+        ProjectDTO project1 = new ProjectDTO("Halil's Spring Boot MVC", "PR001", user2, LocalDate.now(), LocalDate.now(), "Halil Baba kafasina göre takiliyor!", Status.OPEN);
         ProjectDTO project2 = new ProjectDTO("Halil's Spring Boot ORM", "PR002", user2, LocalDate.now(), LocalDate.now(), "ORRRRRR ARE M", Status.IN_PROGRESS);
-        ProjectDTO project3 = new ProjectDTO("Halil's Spring Boot Container", "PR003", user4, LocalDate.now(), LocalDate.now(), "CONTAINER!", Status.OPEN);
-        ProjectDTO project4 = new ProjectDTO("Halil's Spring Boot Core - DI", "PR004", user1, LocalDate.now(), LocalDate.now(), "Dependency Injection", Status.OPEN);
+        ProjectDTO project3 = new ProjectDTO("Halil's Spring Boot Container", "PR003", user4, LocalDate.now(), LocalDate.now(), "CONTAINER!", Status.COMPLETE);
+        ProjectDTO project4 = new ProjectDTO("Halil's Spring Boot Core - DI", "PR004", user6, LocalDate.now(), LocalDate.now(), "Dependency Injection", Status.IN_PROGRESS);
         ProjectDTO project5 = new ProjectDTO("Halil's Spring Boot Inversion of Control - IoC", "PR005", user6, LocalDate.now(), LocalDate.now(), "Inversion of Control!", Status.OPEN);
-        ProjectDTO project6 = new ProjectDTO("Halil's Spring Boot, Bugün cmts ama ben ders calisiyorum.", "PR006", user2, LocalDate.now(), LocalDate.now(), "Wiring - Passing the data to view!!!", Status.OPEN);
+        ProjectDTO project6 = new ProjectDTO("Halil's Spring Boot, Bugün cmts ama ben ders calisiyorum.", "PR006", user4, LocalDate.now(), LocalDate.now(), "Wiring - Passing the data to view!!!", Status.COMPLETE);
 
         projectService.save(project1);
         projectService.save(project2);
