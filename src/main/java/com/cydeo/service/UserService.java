@@ -16,4 +16,6 @@ public interface UserService extends CRUDService <UserDTO, String> {
      */
 
     List<UserDTO> allManagers ();
+
+    List<UserDTO> allEmployees();
 }

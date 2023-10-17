@@ -12,5 +12,7 @@ public interface ProjectService extends CRUDService<ProjectDTO, String> {
 
 
     void complete (ProjectDTO projectDTO);//Bana ProjectDTO objesi
+
+    List<ProjectDTO> allProjectBasedOnManager(UserDTO manager);
     //ver diyoruz.
 }

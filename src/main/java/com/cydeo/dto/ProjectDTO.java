@@ -22,4 +22,24 @@ public class ProjectDTO {
     private LocalDate endDate;
     private String projectDetail;
     private Status projectStatus;
+
+// for Completed tasks and non-completed tasks, we need 2 more field / instance !!
+    private int completedTaskCount;
+    private int unfinishedTaskCount;
+
+    public ProjectDTO(String projectName, String projectCode, UserDTO assignedManager,
+          LocalDate startDate, LocalDate endDate, String projectDetail, Status projectStatus) {
+
+        this.projectName = projectName;
+        this.projectCode = projectCode;
+        this.assignedManager = assignedManager;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.projectDetail = projectDetail;
+        this.projectStatus = projectStatus;
+
+//Completed tasks and non-completed tasks lari burada constructor a yazmiyoruz.
+//Bunlari service class larda implement edip obje pass edip controller üerinden
+//view e yansitacagiz.
+    }
 }

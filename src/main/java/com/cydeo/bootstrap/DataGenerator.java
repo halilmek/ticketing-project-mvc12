@@ -2,14 +2,17 @@ package com.cydeo.bootstrap;
 
 import com.cydeo.dto.ProjectDTO;
 import com.cydeo.dto.RoleDTO;
+import com.cydeo.dto.TaskDTO;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.Role;
 import com.cydeo.enums.Gender;
 import com.cydeo.enums.Status;
 import com.cydeo.service.ProjectService;
 import com.cydeo.service.RoleService;
+import com.cydeo.service.TaskService;
 import com.cydeo.service.UserService;
 import com.cydeo.service.impl.RoleDTOServiceImpl;
+import com.cydeo.service.impl.TaskServiceImpl;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -26,11 +29,14 @@ public class DataGenerator implements CommandLineRunner {
     RoleService roleDTOService;
     UserService userDTOService;
     private final ProjectService projectService;
+    private final TaskService taskService;
 
-    public DataGenerator(RoleService roleDTOService, UserService userDTOService, ProjectService projectService) {
+
+    public DataGenerator(RoleService roleDTOService, UserService userDTOService, ProjectService projectService, TaskService taskService) {
         this.roleDTOService = roleDTOService;
         this.userDTOService = userDTOService;
         this.projectService = projectService;
+        this.taskService = taskService;
     }
 
     @Override
@@ -59,11 +65,11 @@ public class DataGenerator implements CommandLineRunner {
 
 
         UserDTO user1 = new UserDTO("Halil", "Baba", "ztrkhll@gmail.com", "oppo", true, "123456", employeeRole, Gender.MALE);
-        UserDTO user2 = new UserDTO("Hasan", "Kardes", "abc@gmail.com", "oppo", false, "123456", managerRole, Gender.FEMALE);
-        UserDTO user3 = new UserDTO("Elif", "Ünsal", "123@gmail.com", "oppo", true, "123456", adminRole, Gender.MALE);
-        UserDTO user4 = new UserDTO("Padisah", "Sultan", "üpoiu@gmail.com", "oppo", true, "123456", managerRole, Gender.FEMALE);
-        UserDTO user5 = new UserDTO("Selim", "Han", "dsfgh@gmail.com", "oppo", false, "123456", adminRole, Gender.FEMALE);
-        UserDTO user6 = new UserDTO("Saruhan", "Tulumpeyniri", "huijmkjhgv@gmail.com", "oppo", false, "123456", managerRole, Gender.MALE);
+        UserDTO user2 = new UserDTO("Hasan", "Kardes", "kardesHasan@gmail.com", "oppo", false, "123456", managerRole, Gender.FEMALE);
+        UserDTO user3 = new UserDTO("Elif", "Ünsal", "unsalElif@gmail.com", "oppo", true, "123456", adminRole, Gender.MALE);
+        UserDTO user4 = new UserDTO("Padisah", "Sultan", "sultanPadisah@gmail.com", "oppo", true, "123456", managerRole, Gender.FEMALE);
+        UserDTO user5 = new UserDTO("Selim", "Han", "hanSelim@gmail.com", "oppo", false, "123456", adminRole, Gender.FEMALE);
+        UserDTO user6 = new UserDTO("Saruhan", "Tulumpeyniri", "tulumpeyniri@gmail.com", "oppo", false, "123456", employeeRole, Gender.MALE);
 
         userDTOService.save(user1);
         userDTOService.save(user2);
@@ -73,12 +79,12 @@ public class DataGenerator implements CommandLineRunner {
         userDTOService.save(user6);
 
 
-        ProjectDTO project1 = new ProjectDTO("Halil's Spring Boot MVC", "PR001", user2, LocalDate.now(), LocalDate.now(), "Halil Baba kafasina göre takiliyor!", Status.OPEN);
-        ProjectDTO project2 = new ProjectDTO("Halil's Spring Boot ORM", "PR002", user2, LocalDate.now(), LocalDate.now(), "ORRRRRR ARE M", Status.IN_PROGRESS);
-        ProjectDTO project3 = new ProjectDTO("Halil's Spring Boot Container", "PR003", user4, LocalDate.now(), LocalDate.now(), "CONTAINER!", Status.COMPLETE);
-        ProjectDTO project4 = new ProjectDTO("Halil's Spring Boot Core - DI", "PR004", user6, LocalDate.now(), LocalDate.now(), "Dependency Injection", Status.IN_PROGRESS);
-        ProjectDTO project5 = new ProjectDTO("Halil's Spring Boot Inversion of Control - IoC", "PR005", user6, LocalDate.now(), LocalDate.now(), "Inversion of Control!", Status.OPEN);
-        ProjectDTO project6 = new ProjectDTO("Halil's Spring Boot, Bugün cmts ama ben ders calisiyorum.", "PR006", user4, LocalDate.now(), LocalDate.now(), "Wiring - Passing the data to view!!!", Status.COMPLETE);
+        ProjectDTO project1 = new ProjectDTO("Hasan MVC project 1", "PR001", user2, LocalDate.now(), LocalDate.now(), "Halil Baba kafasina göre takiliyor!", Status.OPEN);
+        ProjectDTO project2 = new ProjectDTO("Hasan ORM project 2", "PR002", user2, LocalDate.now(), LocalDate.now(), "ORRRRRR ARE M", Status.IN_PROGRESS);
+        ProjectDTO project3 = new ProjectDTO("Padisah project 3", "PR003", user4, LocalDate.now(), LocalDate.now(), "CONTAINER!", Status.COMPLETE);
+        ProjectDTO project4 = new ProjectDTO("Hasan - DI project 4", "PR004", user2, LocalDate.now(), LocalDate.now(), "Dependency Injection", Status.IN_PROGRESS);
+        ProjectDTO project5 = new ProjectDTO("Padisah Inversion of Control - IoC project 5", "PR005", user4, LocalDate.now(), LocalDate.now(), "Inversion of Control!", Status.OPEN);
+        ProjectDTO project6 = new ProjectDTO("Padisah keyfin keyf !!! project 6", "PR006", user4, LocalDate.now(), LocalDate.now(), "Wiring - Passing the data to view!!!", Status.COMPLETE);
 
         projectService.save(project1);
         projectService.save(project2);
@@ -86,6 +92,28 @@ public class DataGenerator implements CommandLineRunner {
         projectService.save(project4);
         projectService.save(project5);
         projectService.save(project6);
+
+//Yeni TaskDTO lar ekleyelim !!! Ama önce AllArgsConstructor annotation iptal
+//edelim. Cünkü TaskId yi UUID ile otomatik olarak assign edecegim. Normal DB
+//de birsey yapmama gerek yok. Örnegin PostgreSql bunu PK (Primary Key) olarak
+//otomatik assign ediyor.
+        TaskDTO task1 = new TaskDTO(project1, user6, "Controller task 1", "RequestMapping task 1", Status.COMPLETE, LocalDate.now().minusDays(4));
+        TaskDTO task2 = new TaskDTO(project3, user1, "Configuration task 2", "Database Connection task 2", Status.OPEN, LocalDate.now().minusDays(12));
+        TaskDTO task3 = new TaskDTO(project3, user6, "Mapping task 3", "One-To-Many task 3", Status.IN_PROGRESS, LocalDate.now().minusDays(8));
+        TaskDTO task4 = new TaskDTO(project2, user1, "Dependency Injection task 4", "Autowired", Status.IN_PROGRESS, LocalDate.now().minusDays(20));
+        TaskDTO task5 = new TaskDTO(project2, user1, "Dependency task 5", "Autowired", Status.OPEN, LocalDate.now().minusDays(20));
+        TaskDTO task6 = new TaskDTO(project4, user6, "Dependency task 6", "task 6", Status.IN_PROGRESS, LocalDate.now().minusDays(20));
+
+
+        taskService.save(task1);
+        taskService.save(task2);
+        taskService.save(task3);
+        taskService.save(task4);
+        taskService.save(task5);
+        taskService.save(task6);
+
+
+
 
     }
 }

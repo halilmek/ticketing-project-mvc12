@@ -36,24 +36,32 @@
                                                 <th scope="col">Project Name</th>
                                                 <th scope="col">Start/End Date</th>
                                                 <th scope="col">Manager</th>
-                                                <th scope="col">Unfinished/Completed</th>
+                                                <th style="text-align: center" scope="col">Unfinished/Completed</th>
                                                 <th scope="col">Status</th>
                                                 <th scope="col">Action</th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                            <tr th:each="eachProject : ${selectecManagerProjects}">
+                                                <td th:text="${eachProject.projectCode}"></td>
+                                                <td th:text="${eachProject.projectName}"></td>
+                                                <td th:text="${#temporals.format(eachProject.startDate, 'dd.MM.yyyy') +
+                                                ' - ' + #temporals.format(eachProject.endDate, 'dd.MM.yyyy')}"></td>
+                                                <td th:text="${eachProject.assignedManager.firstName + ' ' +
+                                                eachProject.assignedManager.lastName}"></td>
+                                                <td style="text-align: center; white-space: nowrap;">
+                                                    <span th:text="${eachProject.unfinishedTaskCount + '/' + eachProject.completedTaskCount}"></span>
+                                                </td>
+
+                                                <td th:text="${eachProject.projectStatus}"></td>
                                                 <td>
                                                     <!--Show this if the project can be completed-->
-                                                    <a class="btn btn-info rounded-0" href="#">Complete</a>
+                                                    <a th:if="${eachProject.unfinishedTaskCount == 0 && eachProject.projectStatus.value != 'Completed'}"
+                                                       class="btn btn-info rounded-0" th:href="@{/project/manager/complete/{id}(id=${eachProject.projectCode})}"
+                                                    >Complete</a>
                                                     <!--Show this if the project can not be completed-->
-                                                    <a class="btn btn-info rounded-0 disabled-button">Complete</a>
+                                                    <a th:if="${eachProject.unfinishedTaskCount > 0 || eachProject.projectStatus.value == 'Completed'}"
+                                                            class="btn btn-info rounded-0 disabled-button">Complete</a>
                                                 </td>
                                             </tr>
                                             </tbody>

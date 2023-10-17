@@ -57,4 +57,12 @@ public class UserDTOServiceImpl extends AbstractMapService <UserDTO, String>
 
          */
     }
+
+    @Override
+    public List<UserDTO> allEmployees() {
+
+        return super.findAll().stream()
+                .filter(each -> each.getRoleDTO().getId() == 3)
+                .collect(Collectors.toList());
+    }
 }

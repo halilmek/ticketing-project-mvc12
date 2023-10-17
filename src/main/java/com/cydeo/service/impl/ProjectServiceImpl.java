@@ -1,17 +1,25 @@
 package com.cydeo.service.impl;
 
 import com.cydeo.dto.ProjectDTO;
+import com.cydeo.dto.TaskDTO;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.enums.Status;
 import com.cydeo.service.ProjectService;
+import com.cydeo.service.TaskService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl extends AbstractMapService<ProjectDTO, String>
     implements ProjectService {
 
+    private final TaskService taskService;
+
+    public ProjectServiceImpl(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @Override
     public ProjectDTO save(ProjectDTO obj) {
@@ -86,6 +94,64 @@ put() ile eklersek eski degeri override ediyoruz. => Ör =>
 mapOfUser.put(1, "Apple")
 mapOfUser.put(1, "Dragon Fruit")
 HashMap deki yeni deger Dragon Fruit olacak. Cünkü HashMap duplication a izin vermiyor.
+         */
+    }
+
+    @Override
+    public List<ProjectDTO> allProjectBasedOnManager(UserDTO manager) {
+
+        List<ProjectDTO> projectList =
+                findAll()
+                        .stream()
+                        .filter(project -> project.getAssignedManager().equals(manager))
+                        .map(project -> {
+
+                            List<TaskDTO> taskList = taskService.findTasksByManager(manager);
+
+                            int completeTaskCounts = (int) taskList.stream().filter(t -> t.getProjectDTO().equals(project) && t.getTaskStatus() == Status.COMPLETE).count();
+
+                            int unfinishedTaskCounts = (int) taskList.stream().filter(t -> t.getProjectDTO().equals(project) && t.getTaskStatus() != Status.COMPLETE).count();
+
+                            project.setCompletedTaskCount(completeTaskCounts);
+                            project.setUnfinishedTaskCount(unfinishedTaskCounts);
+
+                            return project;
+
+                        }).collect(Collectors.toList());
+
+
+        return projectList;
+
+
+        /*
+        List<ProjectDTO> projectDTOList = findAll().stream()
+                .filter(eachProject -> eachProject.getAssignedManager().equals(manager))
+//Önce belirlenen manager a göre tüm projelerden ilgili olanlari aldim. Sonrasinda da
+    //bu projelerin icindeki tasklara ve onlarin status larina bakacagim. Ve ayni projeler
+    //icinde bitmemis ve tamamlanmis tasklarin sayilarini hesaplayacagim.
+                .map(eachProjectBelongsToManager -> {
+                    List<TaskDTO> taskListForEachProject = taskService.findTasksByManager(manager);
+
+                    int completedTasksInSameProject = (int) taskListForEachProject.stream()
+                            .filter(eachTask -> eachTask.getProjectDTO().equals(eachProjectBelongsToManager) &&
+                                    eachTask.getTaskStatus() == Status.COMPLETE)
+                            .count();
+    //count() method long return ettigi icin (int) ile sonucu downcasting yaptik.
+                    int nonCompletedeTasksInSameProject = (int) taskListForEachProject.stream()
+                            .count() - completedTasksInSameProject;
+                    int nonCompletedeTasksInSameProject2 = (int) taskListForEachProject.stream()
+                                    .filter(eachTask -> eachTask.getProjectDTO().equals(eachProjectBelongsToManager) &&
+                                            eachTask.getTaskStatus() != Status.COMPLETE)
+                            .count();
+                    eachProjectBelongsToManager.setCompletedTaskCount(completedTasksInSameProject);
+                    eachProjectBelongsToManager.setUnfinishedTaskCount(nonCompletedeTasksInSameProject2);
+
+                    return eachProjectBelongsToManager;
+                })
+                .collect(Collectors.toList());
+
+        return projectDTOList;
+
          */
     }
 }
