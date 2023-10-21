@@ -4,6 +4,7 @@ import com.cydeo.dto.TaskDTO;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.enums.Status;
 import com.cydeo.service.TaskService;
+import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -57,23 +58,21 @@ public class TaskServiceImpl extends AbstractMapService<TaskDTO, Long> implement
     @Override
     public void update(TaskDTO obj) {
 
-        TaskDTO updatedTask = super.findById(obj.getId());
+        System.out.println("obj = " + obj);
 
-        if (obj.getId() == null) {
+        TaskDTO updatedTask = findById(obj.getId());
 
-            obj.setId(updatedTask.getId());
-        }
+        //obj.setId(updatedTask.getId());
 
-
-        if (obj.getTaskStatus() == null) {
-
-            obj.setTaskStatus(updatedTask.getTaskStatus());
-        }
+        obj.setTaskStatus(updatedTask.getTaskStatus());
 
         obj.setAssignedDate(updatedTask.getAssignedDate());
 
 
         super.update(obj.getId(), obj);
+
+        System.out.println("obj = " + obj);
+        System.out.println("updatedTask = " + updatedTask);
     }
 
     @Override
@@ -81,6 +80,34 @@ public class TaskServiceImpl extends AbstractMapService<TaskDTO, Long> implement
 
         return super.findAll().stream()
                 .filter(eachTask -> eachTask.getProjectDTO().getAssignedManager().equals(manager))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TaskDTO> findAllTasksByStatusIsNotComplete(Status taskStatus) {
+
+//Burada ! ile not anlami kattigimiz stream ile aranan task lari buluyoruz.
+        return findAll().stream()
+                .filter(eachTask -> !eachTask.getTaskStatus().equals(Status.COMPLETE))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateStatus(TaskDTO taskDTO) {
+
+        //System.out.println("taskDTO = taskStatus " + taskDTO);
+
+        findById(taskDTO.getId()).setTaskStatus(taskDTO.getTaskStatus());
+        update(taskDTO);
+
+        System.out.println("taskDTO = " + taskDTO);
+    }
+
+    @Override
+    public List<TaskDTO> findAllTasksByStatus() {
+
+        return findAll().stream()
+                .filter(eachTasks -> eachTasks.getTaskStatus().equals(Status.COMPLETE))
                 .collect(Collectors.toList());
     }
 }

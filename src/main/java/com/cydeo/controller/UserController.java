@@ -102,7 +102,8 @@ save islemlerini yapiyor.
 //Ancak update edilen user buraya getirip map ime save etmem lazim, ama nasil?
 //@ModelAttribute ile !!!
         userDTOService.update(userDTO);
-        userDTOService.findAll().stream().filter(each -> each.getUserName().equals(username)).forEach(System.out::println);
+        userDTOService.findAll().stream().
+                filter(each -> each.getUserName().equals(username)).forEach(System.out::println);
 
         return "redirect:/user/create";
     }

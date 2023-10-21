@@ -41,12 +41,20 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+
+                                            <tr th:each="eachCompletedTask : ${completedTasks}">
+
+                                                <td th:text="${eachCompletedTask.projectDTO.projectCode + ' - ' +
+                                                eachCompletedTask.projectDTO.projectName}"></td>
+
+                                                <td th:text="${eachCompletedTask.taskSubject}"></td>
+
+                                                <td th:text="${eachCompletedTask.assignedEmployee.firstName + ' ' +
+                                                eachCompletedTask.assignedEmployee.lastName}"></td>
+
+                                                <td th:text="${#temporals.format(eachCompletedTask.assignedDate, 'dd.MM.yyyy')}"></td>
+
+                                                <td th:text="${eachCompletedTask.taskStatus.value}"></td>
                                             </tr>
                                             </tbody>
                                         </table>
