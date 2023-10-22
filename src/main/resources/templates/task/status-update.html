@@ -30,8 +30,8 @@
                                 </header>
                                 <div class="panel-body">
                                     <!-- ------------------------FORM START----------------------------- -->
-                                    <form th:object="${updatedTask}"
-                              method="post" th:action="@{/employee/taskEdited/{id}(id=${updatedTask.id})}">
+                                    <form th:action="@{/employee/taskEdited/{id}(id=${updatedTask.id})}"
+                                          method="post" th:object="${updatedTask}">
 
                                         <div class="row">
                                             <div class="col-sm-6 col-md-6 col-xs-12">
@@ -69,7 +69,7 @@
                                                 <div class="form-group">
                                                     <label>Assigned Employee</label>
                                                     <select th:field="*{assignedEmployee}"
-                                                            name="assignedemployee" class="custom-select" readonly>
+                                                            name="assignedEmployee" class="custom-select" readonly>
 
                                                         <option th:value="${updatedTask.assignedEmployee.userName}"
                                                         th:text="${updatedTask.assignedEmployee.firstName + ' ' +
@@ -128,8 +128,7 @@
                                                             <label>Task Detail</label>
                                                             <textarea th:field="*{taskDetail}"
                                                                       id="taskdetail" class="form-control" rows="3"
-                                                                      aria-describedby="inputGroupPrepend"
-                                                                      disabled>
+                                                                      aria-describedby="inputGroupPrepend" readonly>
 
                                                             </textarea>
 

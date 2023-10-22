@@ -8,7 +8,10 @@ import com.cydeo.service.TaskService;
 import com.cydeo.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/task")
@@ -49,7 +52,19 @@ public class TaskController {
 
 //Save button a islev kazandirmak ve java side saving
     @PostMapping("/create")
-    public String newTaskSaving (@ModelAttribute("emptyTask") TaskDTO taskDTO) {
+    public String newTaskSaving (@Valid @ModelAttribute("emptyTask") TaskDTO taskDTO,
+                                 BindingResult bindingResult, Model model) {
+
+//Hersey bittikten sonra validation !!!
+        if (bindingResult.hasErrors()) {
+
+            model.addAttribute("allProjects", projectService.findAll());
+            model.addAttribute("allEmployees", userService.allEmployees());
+            model.addAttribute("allTasks", taskService.findAll());
+
+            return "/task/create";
+
+        }
 
 //önceki method da user verilen bos form dan setter ile girilen bilgileri almak
 //icin @ModelAttribute u kullanalim. Ve save method ile save edelim
@@ -138,8 +153,19 @@ public class TaskController {
 //field / instance i olacak. Yani id olacak taskId degil. Cünkü TaskDTO da
 //id, private Long id; olarak tanimlandi.
     @PostMapping("/update/{id}")
-    public String updateTask (@ModelAttribute("updatedTask") TaskDTO taskDTO) {
+    public String updateTask (@Valid @ModelAttribute("updatedTask") TaskDTO taskDTO,
+                              BindingResult bindingResult, Model model) {
 
+        if (bindingResult.hasErrors()) {
+
+            model.addAttribute("allProjects", projectService.findAll());
+            model.addAttribute("allEmployees", userService.allEmployees());
+            model.addAttribute("allTasks", taskService.findAll());
+
+            return "/task/update";
+        }
+
+//update() method has problem, not working !!!
         taskService.update(taskDTO);
         return "redirect:/task/create";
     }

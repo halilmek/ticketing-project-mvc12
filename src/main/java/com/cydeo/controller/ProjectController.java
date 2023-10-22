@@ -8,8 +8,10 @@ import com.cydeo.service.RoleService;
 import com.cydeo.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -47,7 +49,18 @@ public class ProjectController {
 //ben de onu @ModelAttribute ile local degisken olan newProject üzerinden alip
 //map ime save edecegim.
     @PostMapping("/create")
-    public String addingProject (@ModelAttribute ("newProject") ProjectDTO projectDTO) {
+    public String addingProject (@Valid @ModelAttribute ("newProject") ProjectDTO projectDTO,
+                                 BindingResult bindingResult, Model model) {
+
+
+//Hersey bittikten sonra validation yapiyoruz.
+        if (bindingResult.hasErrors()) {
+
+            model.addAttribute("allProjects", projectService.findAll());
+            model.addAttribute("allUsers", userService.allManagers());
+
+            return "/project/create";
+        }
 
 //Redirect edecegimiz icin burada Model interface i call etmedik.
 
@@ -105,8 +118,21 @@ public class ProjectController {
     }
 
 //Simdi update controller method unun database etkili olabilmesi icin PostMapping
-    @PostMapping("/update")
-    public String pushingUpdateInDB (@ModelAttribute("newProject") ProjectDTO projectDTO) {
+    @PostMapping("/update") //Hata cikabilir => Bu methodu update etmemiz gerekiyor sanki !!!
+    public String pushingUpdateInDB (@Valid @ModelAttribute("newProject") ProjectDTO projectDTO,
+                                     BindingResult bindingResult, Model model) {
+
+//Hersey bittikten sonra validation yapiyoruz !!!
+        if (bindingResult.hasErrors()) {
+
+            model.addAttribute("allProjects", projectService.findAll());
+            model.addAttribute("allUsers", userService.allManagers());
+//Bastan allUsers dedigimiz icin öyle kaldi, allManagers daha dogru olurdu.
+
+            return "/project/create";
+        }
+
+    //update() method calismiyor, bunu güncellemek gerekiyor, task/status-update, under employee...
 
 //Degisiklikleri yapilan ve önceki method da local variable olan projeyi @ModelAttribute
 //ile burada call ediyoruz ve save methodu üzerinden DB ye kaydediyoruz.

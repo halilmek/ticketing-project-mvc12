@@ -72,10 +72,11 @@ public class EmployeeController {
         taskDTO.setId(taskService.findById(taskId).getId());
         taskDTO.setTaskDetail(taskService.findById(taskId).getTaskDetail());
         taskDTO.setAssignedDate(taskService.findById(taskId).getAssignedDate());
-        //System.out.println("taskDTO = " + taskDTO);
-        //taskService.updateStatus(taskDTO);
         System.out.println("taskDTO = " + taskDTO);
-        taskService.save(taskDTO); //HashMap put() ile listeme koyacak, ancak HashMap
+
+        taskService.updateStatus(taskDTO);
+        //System.out.println("taskDTO = " + taskDTO);
+        //taskService.save(taskDTO); //HashMap put() ile listeme koyacak, ancak HashMap
 //duplication a izin vermedigi icin ayni id si olan eski obje kick off yapacak ;=)
 
         return "redirect:/employee/pending-tasks";//end point yaziliyor redirect ile

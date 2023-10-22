@@ -56,22 +56,22 @@ public class TaskServiceImpl extends AbstractMapService<TaskDTO, Long> implement
     }
 
     @Override
-    public void update(TaskDTO obj) {
+    public void update(TaskDTO taskDTO) {
 
-        System.out.println("obj = " + obj);
+        System.out.println("taskDTO = " + taskDTO);
 
-        TaskDTO updatedTask = findById(obj.getId());
+        TaskDTO updatedTask = findById(taskDTO.getId());
 
-        //obj.setId(updatedTask.getId());
+        //taskDTO.setId(updatedTask.getId());
 
-        obj.setTaskStatus(updatedTask.getTaskStatus());
+        taskDTO.setTaskStatus(updatedTask.getTaskStatus());
 
-        obj.setAssignedDate(updatedTask.getAssignedDate());
+        taskDTO.setAssignedDate(updatedTask.getAssignedDate());
 
 
-        super.update(obj.getId(), obj);
+        super.update(taskDTO.getId(), taskDTO);
 
-        System.out.println("obj = " + obj);
+        System.out.println("taskDTO = " + taskDTO);
         System.out.println("updatedTask = " + updatedTask);
     }
 
@@ -98,7 +98,9 @@ public class TaskServiceImpl extends AbstractMapService<TaskDTO, Long> implement
         //System.out.println("taskDTO = taskStatus " + taskDTO);
 
         findById(taskDTO.getId()).setTaskStatus(taskDTO.getTaskStatus());
-        update(taskDTO);
+        //findById(taskDTO.getId()).setAssignedDate(taskDTO.getAssignedDate());
+        //mapOfUser.put(taskDTO.getId(), taskDTO);
+        //update(taskDTO);
 
         System.out.println("taskDTO = " + taskDTO);
     }
