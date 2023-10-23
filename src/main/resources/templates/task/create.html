@@ -44,6 +44,16 @@
                                                         th:value="${eachProject.projectCode}"
                                                                 th:text="${eachProject.projectName}"></option>
                                                     </select>
+
+                                                    <!-- VALIDATION PART kompartmants-->
+                                                    <div class="invalid-feedback"
+                                                         th:if="${#fields.hasErrors('projectDTO')}">
+                                                        <ul>
+                                                            <li th:each="err : ${#fields.errors('projectDTO')}"
+                                                                th:text="${err}"></li>
+                                                        </ul>
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -57,6 +67,16 @@
                                                         <option th:each="eachEmp : ${allEmployees}" th:value="${eachEmp.userName}"
                                                         th:text="${eachEmp.firstName + ' ' + eachEmp.lastName}"></option>
                                                     </select>
+
+                                                    <!-- VALIDATION PART kompartmants-->
+                                                    <div class="invalid-feedback"
+                                                         th:if="${#fields.hasErrors('assignedEmployee')}">
+                                                        <ul>
+                                                            <li th:each="err : ${#fields.errors('assignedEmployee')}"
+                                                                th:text="${err}"></li>
+                                                        </ul>
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -67,6 +87,16 @@
                                                     <label for="tasksubject" class="col-form-label">Task Subject</label>
                                                     <input id="tasksubject" type="text" class="form-control"
                                                            placeholder="task subject" th:field="*{taskSubject}">
+
+                                                    <!-- VALIDATION PART kompartmants-->
+                                                    <div class="invalid-feedback"
+                                                         th:if="${#fields.hasErrors('taskSubject')}">
+                                                        <ul>
+                                                            <li th:each="err : ${#fields.errors('taskSubject')}"
+                                                                th:text="${err}"></li>
+                                                        </ul>
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -79,6 +109,16 @@
                                                               placeholder="task detail" th:field="*{taskDetail}">
 
                                                     </textarea>
+
+                                                    <!-- VALIDATION PART kompartmants-->
+                                                    <div class="invalid-feedback"
+                                                         th:if="${#fields.hasErrors('taskDetail')}">
+                                                        <ul>
+                                                            <li th:each="err : ${#fields.errors('taskDetail')}"
+                                                                th:text="${err}"></li>
+                                                        </ul>
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>

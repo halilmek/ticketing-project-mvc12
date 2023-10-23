@@ -6,8 +6,10 @@ import com.cydeo.service.RoleService;
 import com.cydeo.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 
 @Controller
@@ -33,7 +35,7 @@ public class UserController {
         model.addAttribute("allUser", userDTOService.findAll());
 
 //Printing the map => To see the results !!!
-        roleDTOService.findAll().forEach(System.out::println);
+        //roleDTOService.findAll().forEach(System.out::println);
 
 /*
 Yukaridaki obje nin save() methodu bunlari return ediyor.
@@ -42,7 +44,7 @@ RoleDTO(id=2, description=Manager)
 RoleDTO(id=3, description=Employee)
  */
 
-        userDTOService.findAll().forEach(System.out::println);
+        //userDTOService.findAll().forEach(System.out::println);
 /*
 Yukaridaki userDTOService obje si ise bunlari return ediyor.
 UserDTO(firstName=Halil, lastName=Baba, userName=ztrkhll@gmail.com, password=oppo, isEnabled=true, phone=123456, roleDTO=RoleDTO(id=2, description=Manager), gender=MALE)
@@ -51,18 +53,39 @@ UserDTO(firstName=Padisah, lastName=Sultan, userName=üpoiu@gmail.com, password=
 Yani her obje kendisine AbstractMapService araciligiyla tahsis edilen MAP te
 save islemlerini yapiyor.
  */
+
+
         return "/user/create";
     }
 
 
-    @PostMapping("/create")
-    public String insertUser (@ModelAttribute("newUser") UserDTO userDTO, Model model) {
+    @PostMapping("/create/saving")
+    public String insertUser (@Valid @ModelAttribute("newUser") UserDTO newUser, BindingResult bindingResult,
+                              Model model) {
 
-        userDTOService.save(userDTO);//Böyle dalyarak gibi objeyi pass edemezsin.
+        System.out.println("newUser = " + newUser);
+//Herseyden sonra simdi validation !!!
+        if (bindingResult.hasErrors()) {
+
+            model.addAttribute("listOfRoles", roleDTOService.findAll());
+            model.addAttribute("allUser", userDTOService.findAll());
+
+            return "/user/create";
+        }
+
+        System.out.println("newUser = " + newUser);
+
+        userDTOService.findAll().stream()
+                        .forEach(System.out::println);
+
+        userDTOService.save(newUser);//Böyle dalyarak gibi objeyi pass edemezsin.
 //Cünkü role ü String e cevirmekte sorun yasiyoruz. Role bir obje oldugu icin.
 
         //return "redirect:/user/create";//Böylece eski page de kalma imkanina sahibiz.
 //return "redirect:/user/create"; => user dan önce / (slash) var diye run etmedi.
+
+        //System.out.println("newUser = " + newUser);
+
 
         return "redirect:/user/create";
     }
@@ -90,8 +113,18 @@ save islemlerini yapiyor.
     }
 
     @PostMapping("/update/{username}")
-    public String updateUser (@PathVariable ("username") String username, //Buna burada gerek yok
-                              @ModelAttribute ("user") UserDTO userDTO) {
+    public String updateUser (@Valid @PathVariable ("username") String username, @ModelAttribute("user") UserDTO userDTO,BindingResult bindingResult,
+    //@PathVariable ("username") String username, //Buna burada gerek yok
+                             Model model) {
+
+//Herseyden sonra validation icin buradayiz tekrardan !!!
+        if (bindingResult.hasErrors()) {
+
+            model.addAttribute("listOfRoles", roleDTOService.findAll());
+            model.addAttribute("allUser", userDTOService.findAll());
+
+            return "/user/update";
+        }
 
         //model.addAttribute("newUser", new UserDTO());
 

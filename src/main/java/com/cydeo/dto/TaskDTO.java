@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -15,10 +17,18 @@ import java.util.UUID;
 @Data
 public class TaskDTO {
 
+    @NotNull
     private ProjectDTO projectDTO;
+
+    @NotNull
     private UserDTO assignedEmployee;
+
+    @NotBlank
     private String taskSubject;
+
+    @NotBlank
     private String taskDetail;
+
     private Status taskStatus;
     private LocalDate assignedDate;
 

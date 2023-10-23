@@ -64,12 +64,13 @@ public class DataGenerator implements CommandLineRunner {
 // genel bir java class (String) ve methodu gibi (length() veya subString() gibi).-
 
 
-        UserDTO user1 = new UserDTO("Halil", "Baba", "ztrkhll@gmail.com", "oppo", true, "123456", employeeRole, Gender.MALE);
-        UserDTO user2 = new UserDTO("Hasan", "Kardes", "kardesHasan@gmail.com", "oppo", false, "123456", managerRole, Gender.FEMALE);
-        UserDTO user3 = new UserDTO("Elif", "Ünsal", "unsalElif@gmail.com", "oppo", true, "123456", adminRole, Gender.MALE);
-        UserDTO user4 = new UserDTO("Padisah", "Sultan", "sultanPadisah@gmail.com", "oppo", true, "123456", managerRole, Gender.FEMALE);
-        UserDTO user5 = new UserDTO("Selim", "Han", "hanSelim@gmail.com", "oppo", false, "123456", adminRole, Gender.FEMALE);
-        UserDTO user6 = new UserDTO("Saruhan", "Tulumpeyniri", "tulumpeyniri@gmail.com", "oppo", false, "123456", employeeRole, Gender.MALE);
+        UserDTO user1 = new UserDTO("Halil", "Baba", "ztrkhll@gmail.com", "123456", "123456", true, "oppo", employeeRole, Gender.MALE);
+        UserDTO user2 = new UserDTO("Hasan", "Kardes", "kardesHasan@gmail.com", "123456", "123456", false, "oppo", managerRole, Gender.FEMALE);
+        UserDTO user3 = new UserDTO("Elif", "Ünsal", "unsalElif@gmail.com", "123456", "123456", true, "oppo", adminRole, Gender.MALE);
+        UserDTO user4 = new UserDTO("Padisah", "Sultan", "sultanPadisah@gmail.com", "123456", "123456", true, "oppo", managerRole, Gender.FEMALE);
+        UserDTO user5 = new UserDTO("Selim", "Han", "hanSelim@gmail.com", "123456", "123456", false, "oppo", adminRole, Gender.FEMALE);
+        UserDTO user6 = new UserDTO("Saruhan", "Tulumpeyniri", "tulumpeyniri@gmail.com", "123456", "123456", false, "oppo", employeeRole, Gender.MALE);
+
 
         userDTOService.save(user1);
         userDTOService.save(user2);

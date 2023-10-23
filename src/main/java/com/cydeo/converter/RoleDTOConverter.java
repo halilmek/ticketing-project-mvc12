@@ -31,6 +31,12 @@ public class RoleDTOConverter implements Converter<String, RoleDTO> {
         view daki id kismi value da String olarak yer aliyor.
         <option value="2">Manager</option>
          */
+
+        if (source == null || source.equals("")) {
+
+            return null;
+        }
+
         return roleDTOService.findById(Long.parseLong(source));
 //Peki bu method ne zaman run edecek? => Bunun icin Spring den @ConfigurationPropertiesBinding
 // kullaniyoruz. Whenever the app is up, Spring runs this method at the same time.

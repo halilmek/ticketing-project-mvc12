@@ -52,8 +52,8 @@ public class EmployeeController {
     }
 
     @PostMapping("/taskEdited/{taskId}")
-    public String savingEditedTask (@Valid @ModelAttribute("updatedTask") TaskDTO taskDTO, BindingResult bindingResult,
-                                    Model model, @PathVariable("taskId") Long taskId) {
+    public String savingEditedTask (@Valid @PathVariable("taskId") Long taskId, @ModelAttribute("updatedTask") TaskDTO taskDTO, BindingResult bindingResult,
+                                    Model model) {
 
         System.out.println("taskService.findById(taskId) = " + taskService.findById(taskId));
 
